@@ -1,4 +1,3 @@
-from cgi import test
 from itertools import product
 
 
