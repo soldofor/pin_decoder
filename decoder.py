@@ -38,3 +38,5 @@ def pin_decoder(keyboard: list[list[str]], pin: str) -> list[str]:
 
     # Return a list of all possible combinations of the pin keys as strings
     return ["".join(x) for x in product(*coordinates)]
+
+print(pin_decoder([], "13"))
