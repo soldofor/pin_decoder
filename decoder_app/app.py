@@ -1,19 +1,35 @@
+from cgi import test
 from itertools import product
+
+
+def validate(keyboard: list[list[str]], pin: str) -> list[str]:
+    """
+    Validates keyboard and pin provided by user.
+    :param keyboard: a list of lists of strings
+    :param pin: a string of digits
+    :return: nothing or raises ValueError if validation fails
+    """
+    if not all([isinstance(keyboard, list), isinstance(pin, str)]):
+        raise ValueError(
+            f"Input is not valid. Keyboard must be a list. Pin must be a string.")
+    if not pin.isdigit():
+        raise ValueError(
+            f"Input is not valid. Pin must be a string of digits.")
+    if not all([isinstance(el, list) for el in keyboard]) or not all([isinstance(el[i], str) for el in keyboard for i in range(len(el))]):
+        raise ValueError(
+            f"Input is not valid. Keyboard must be a list of lists of strings.")
 
 
 def pin_decoder(keyboard: list[list[str]], pin: str) -> list[str]:
     """
     Returns probable pin codes using the given keyboard and observed input pin.
+    Based on the observed pin, it also uses the vertical and horizontal neighbours
+    of each key to build all possible permutations.
     :param keyboard: a list of lists of strings
     :param pin: a string of digits (could also decrypt a string of letters on the keyboard)
     :return: a list of strings
     """
-
-    # Check if the pin is valid
-    if type(pin) != str:
-        raise ValueError(f"{pin} is not a valid PIN. PIN must be a string of digits")
-    if not pin.isdigit():
-        raise ValueError(f"{pin} is not a valid PIN. PIN string must be made of digits")
+    validate(keyboard, pin)
 
     # Create a list with the coordinates of the observed pin keys
     coordinates = [[(i, j)] for digit in pin for i in range(len(keyboard)) for j in
@@ -22,7 +38,8 @@ def pin_decoder(keyboard: list[list[str]], pin: str) -> list[str]:
     # Append neighbouring keys to the list of coordinates, transform coordinates list to list of keys
     for coords in coordinates:
         key_coords = coords[0]  # Get the coordinates of the observed key
-        coords[0] = keyboard[key_coords[0]][key_coords[1]]  # Replace the coordinates with the key itself
+        # Replace the coordinates with the key itself
+        coords[0] = keyboard[key_coords[0]][key_coords[1]]
         try:
             coords.append(keyboard[key_coords[0] + 1][key_coords[1]])
         except IndexError:
@@ -38,3 +55,9 @@ def pin_decoder(keyboard: list[list[str]], pin: str) -> list[str]:
 
     # Return a list of all possible combinations of the pin keys as strings
     return ["".join(x) for x in product(*coordinates)]
+
+if __name__ == '__main__':
+    from tests import test_app
+    test_app()
+    print("Another way to test(__name__ = '__main__')")
+    
