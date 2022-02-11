@@ -1,7 +1,7 @@
 from itertools import product
 
 
-def validate(keyboard: list[list[str]], pin: str) -> list[str]:
+def validate(keyboard, pin):
     """
     Validates keyboard and pin provided by user.
     :param keyboard: a list of lists of strings
@@ -19,7 +19,7 @@ def validate(keyboard: list[list[str]], pin: str) -> list[str]:
             f"Input is not valid. Keyboard must be a list of lists of strings.")
 
 
-def pin_decoder(keyboard: list[list[str]], pin: str) -> list[str]:
+def pin_decoder(keyboard, pin):
     """
     Returns probable pin codes using the given keyboard and observed input pin.
     Based on the observed pin, it also uses the vertical and horizontal neighbours
@@ -56,7 +56,4 @@ def pin_decoder(keyboard: list[list[str]], pin: str) -> list[str]:
     return ["".join(x) for x in product(*coordinates)]
 
 if __name__ == '__main__':
-    from tests import test_app
-    test_app()
-    print("Another way to test(__name__ = '__main__')")
-    
+    print("Find something to do here")
