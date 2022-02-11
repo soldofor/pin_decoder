@@ -1,6 +1,9 @@
 from itertools import product
 
 
+DEFAULT_KEYBOARD = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]
+
+
 def validate(keyboard, pin):
     """
     Validates keyboard and pin provided by user.
@@ -10,13 +13,16 @@ def validate(keyboard, pin):
     """
     if not all([isinstance(keyboard, list), isinstance(pin, str)]):
         raise ValueError(
-            f"Input is not valid. Keyboard must be a list. Pin must be a string.")
+            f"Input is not valid. Keyboard must be a list. Pin must be a string."
+        )
     if not pin.isdigit():
+        raise ValueError(f"Input is not valid. Pin must be a string of digits.")
+    if not all([isinstance(el, list) for el in keyboard]) or not all(
+        [isinstance(el[i], str) for el in keyboard for i in range(len(el))]
+    ):
         raise ValueError(
-            f"Input is not valid. Pin must be a string of digits.")
-    if not all([isinstance(el, list) for el in keyboard]) or not all([isinstance(el[i], str) for el in keyboard for i in range(len(el))]):
-        raise ValueError(
-            f"Input is not valid. Keyboard must be a list of lists of strings.")
+            f"Input is not valid. Keyboard must be a list of lists of strings."
+        )
 
 
 def pin_decoder(keyboard, pin):
@@ -28,11 +34,20 @@ def pin_decoder(keyboard, pin):
     :param pin: a string of digits (could also decrypt a string of letters on the keyboard)
     :return: a list of strings
     """
+
+    if keyboard is None:
+        keyboard = DEFAULT_KEYBOARD
+
     validate(keyboard, pin)
 
     # Create a list with the coordinates of the observed pin keys
-    coordinates = [[(i, j)] for digit in pin for i in range(len(keyboard)) for j in
-                   range(len(keyboard[i])) if keyboard[i][j] == digit]
+    coordinates = [
+        [(i, j)]
+        for digit in pin
+        for i in range(len(keyboard))
+        for j in range(len(keyboard[i]))
+        if keyboard[i][j] == digit
+    ]
 
     # Append neighbouring keys to the list of coordinates, transform coordinates list to list of keys
     for coords in coordinates:
@@ -55,5 +70,8 @@ def pin_decoder(keyboard, pin):
     # Return a list of all possible combinations of the pin keys as strings
     return ["".join(x) for x in product(*coordinates)]
 
-if __name__ == '__main__':
-    print("Find something to do here")
+
+if __name__ == "__main__":
+    user_pin = input("Enter observed pin: ")
+    variations = pin_decoder(keyboard=None, pin=user_pin)
+    print("You can try the following variations:", variations)
