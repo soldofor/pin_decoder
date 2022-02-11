@@ -2,7 +2,7 @@
 Short exercise to generate a list o possible PINs based on observed Keyboard Input.
 
 
-```# Hacking all PIN variations
+## Hacking all PIN variations
 
 Suppose that you are part of a team that breaks electric locks. The way the
 team operates is that there is a spy that overlooks what pin is introduced
@@ -27,4 +27,5 @@ Reported_pin = '13'
 
 Possible variations = ['13', '23', '43', '12', '22', '42', '16', '26', '46']
 ```
+
 _Explanation_: Adjacent keys of 1 are 2 and 4 and adjacent keys of 3 are 2 and 6```
