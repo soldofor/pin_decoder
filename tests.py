@@ -49,8 +49,8 @@ def test_app():
         "216"
     ]
     assert actual_value == sorted(expected_value), "Test case failed on pin = 123"
-
     # test case (belongs to a test scenario -- empty keyboard) -> error
+
     # test case (belongs to a test scenario -- empty pin, valid keyboard) -> empty list
     # test case (belongs to a test scenario -- flat keyboard ["1".."9"]) -> valid
     # test case (belongs to a test scenario -- matrix keyboard ["1".."3"] ["4" .. "6"])
