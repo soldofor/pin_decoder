@@ -11,19 +11,21 @@ def validate(keyboard, pin):
     :param pin: a string of digits
     :return: nothing or raises ValueError if validation fails
     """
-    if not all([isinstance(keyboard, list), isinstance(pin, str), keyboard != []]):
-        raise ValueError(
-            f"Input is not valid. Keyboard must be a list. Pin must be a string. Empty keyboard is not allowed."
+    if not all([isinstance(keyboard, list), isinstance(pin, str)]):
+        raise TypeError(
+            f"Input is not valid. Keyboard must be a list. Pin must be a string."
         )
+    if keyboard == [] or pin == "":
+        raise ValueError("Keyboard or PIN cannot be empty.")
     if not all([isinstance(row, list) for row in keyboard]):
-        raise ValueError("Keyboard must be a list of lists.")
+        raise TypeError("Keyboard must be a list of lists.")
     if not all([isinstance(key, str) for row in keyboard for key in row]):
-        raise ValueError("Keyboard must be a list of lists of strings.")
+        raise TypeError("Keyboard must be a list of lists of strings.")
     if len(set(pin) - set(key for lst in keyboard for key in lst)) != 0:
         raise ValueError("Pin must contain only keys from the keyboard.")
 
 
-def pin_decoder(keyboard=DEFAULT_KEYBOARD, pin=""):
+def pin_decoder(keyboard, pin):
     """
     Returns probable pin codes using the given keyboard and observed input pin.
     Based on the observed pin, it also uses the vertical and horizontal neighbours
@@ -67,5 +69,5 @@ def pin_decoder(keyboard=DEFAULT_KEYBOARD, pin=""):
 
 if __name__ == "__main__":
     user_pin = input("Enter observed pin: ")
-    variations = pin_decoder(pin=user_pin)
+    variations = pin_decoder(DEFAULT_KEYBOARD, user_pin)
     print("You can try the following variations:", variations)
