@@ -9,7 +9,7 @@ def test_app():
         "2",
     ], f"Wrong result for {keyboard} and PIN = 1"
 
-    actual_value = pin_decoder(keyboard, "123")
+    actual_value = sorted(pin_decoder(keyboard, "123"))
     expected_value = [
         "123",
         "126",
@@ -45,10 +45,10 @@ def test_app():
         "236",
         "232",
         "213",
-        "216",
         "212",
+        "216"
     ]
-    assert actual_value == expected_value, "Test case bla bla failed on empty pin"
+    assert actual_value == sorted(expected_value), "Test case failed on pin = 123"
 
     # test case (belongs to a test scenario -- empty keyboard) -> error
     # test case (belongs to a test scenario -- empty pin, valid keyboard) -> empty list
