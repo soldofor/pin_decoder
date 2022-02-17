@@ -1,6 +1,5 @@
 from itertools import product
 
-
 DEFAULT_KEYBOARD = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"], ["*", "0", "#"]]
 
 
@@ -15,13 +14,15 @@ def validate(keyboard, pin):
         raise TypeError(
             f"Input is not valid. Keyboard must be a list. Pin must be a string."
         )
-    if keyboard == [] or pin == "":
-        raise ValueError("Keyboard or PIN cannot be empty.")
     if not all([isinstance(row, list) for row in keyboard]):
         raise TypeError("Keyboard must be a list of lists.")
     if not all([isinstance(key, str) for row in keyboard for key in row]):
         raise TypeError("Keyboard must be a list of lists of strings.")
-    if len(set(pin) - set(key for lst in keyboard for key in lst)) != 0:
+    if keyboard == []:
+        raise ValueError("Keyboard cannot be empty.")
+    if pin == "":
+        raise ValueError("Pin cannot be empty.")
+    if set(pin) - set(key for lst in keyboard for key in lst):
         raise ValueError("Pin must contain only keys from the keyboard.")
 
 
