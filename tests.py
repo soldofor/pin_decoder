@@ -1,57 +1,16 @@
 from app import pin_decoder
 
-keyboard = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]
+keyboard = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"], ["*", "0", "#"]]
+
 
 def test_app():
-    assert pin_decoder(keyboard, "1") == [
-        "1",
-        "4",
-        "2",
-    ], f"Wrong result for {keyboard} and PIN = 1"
+    test_pairs = [("13", ["22", "16", "12", "43", "46", "42", "23", "26", "13"]), ("1", ["2", "4", "1"]),
+                  ("3", ["3", "6", "2"]),
+                  ("23", ["23", "26", "22", "53", "56", "52", "33", "36", "32", "13", "16", "12"])]
+    for pair in test_pairs:
+        assert sorted(pin_decoder(keyboard, pair[0])) == sorted(
+            pair[1]), f"Wrong result for keyboard = {keyboard} and PIN = {pair[0]}"
 
-    actual_value = pin_decoder(keyboard, "123")
-    expected_value = [
-        "123",
-        "126",
-        "122",
-        "153",
-        "156",
-        "152",
-        "133",
-        "136",
-        "132",
-        "113",
-        "116",
-        "112",
-        "423",
-        "426",
-        "422",
-        "453",
-        "456",
-        "452",
-        "433",
-        "436",
-        "432",
-        "413",
-        "416",
-        "412",
-        "223",
-        "226",
-        "222",
-        "253",
-        "256",
-        "252",
-        "233",
-        "236",
-        "232",
-        "213",
-        "216",
-        "212",
-    ]
-    assert actual_value == expected_value, "Test case bla bla failed on empty pin"
-
-    # test case (belongs to a test scenario -- empty keyboard) -> error
-    # test case (belongs to a test scenario -- empty pin, valid keyboard) -> empty list
     # test case (belongs to a test scenario -- flat keyboard ["1".."9"]) -> valid
     # test case (belongs to a test scenario -- matrix keyboard ["1".."3"] ["4" .. "6"])
     # test case (belongs to a test scenario -- pin value not in keyboard, valid keyboard)

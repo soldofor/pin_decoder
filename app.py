@@ -1,7 +1,6 @@
 from itertools import product
 
-
-DEFAULT_KEYBOARD = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]
+DEFAULT_KEYBOARD = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"], ["*", "0", "#"]]
 
 
 def validate(keyboard, pin):
@@ -12,17 +11,19 @@ def validate(keyboard, pin):
     :return: nothing or raises ValueError if validation fails
     """
     if not all([isinstance(keyboard, list), isinstance(pin, str)]):
-        raise ValueError(
+        raise TypeError(
             f"Input is not valid. Keyboard must be a list. Pin must be a string."
         )
-    if not pin.isdigit():
-        raise ValueError(f"Input is not valid. Pin must be a string of digits.")
-    if not all([isinstance(el, list) for el in keyboard]) or not all(
-        [isinstance(el[i], str) for el in keyboard for i in range(len(el))]
-    ):
-        raise ValueError(
-            f"Input is not valid. Keyboard must be a list of lists of strings."
-        )
+    if not all([isinstance(row, list) for row in keyboard]):
+        raise TypeError("Keyboard must be a list of lists.")
+    if not all([isinstance(key, str) for row in keyboard for key in row]):
+        raise TypeError("Keyboard must be a list of lists of strings.")
+    if keyboard == []:
+        raise ValueError("Keyboard cannot be empty.")
+    if pin == "":
+        raise ValueError("Pin cannot be empty.")
+    if set(pin) - set(key for lst in keyboard for key in lst):
+        raise ValueError("Pin must contain only keys from the keyboard.")
 
 
 def pin_decoder(keyboard, pin):
@@ -34,10 +35,6 @@ def pin_decoder(keyboard, pin):
     :param pin: a string of digits (could also decrypt a string of letters on the keyboard)
     :return: a list of strings
     """
-
-    if keyboard is None:
-        keyboard = DEFAULT_KEYBOARD
-
     validate(keyboard, pin)
 
     # Create a list with the coordinates of the observed pin keys
@@ -73,5 +70,5 @@ def pin_decoder(keyboard, pin):
 
 if __name__ == "__main__":
     user_pin = input("Enter observed pin: ")
-    variations = pin_decoder(keyboard=None, pin=user_pin)
+    variations = pin_decoder(DEFAULT_KEYBOARD, user_pin)
     print("You can try the following variations:", variations)
